@@ -7,6 +7,7 @@ CDN-style hosting of FloorieWallie in-app help packs: per-language zips + `manif
 Rodion publishes; the app only reads. This repo is a separate GitHub project, not part of FloorieWallie's history.
 
 ## Local Contracts
+- `DESIGN.md` holds the full design rationale and end-to-end process (app-side resolution/install logic, consistency rules, why git-raw and not PAD/private folders); it supersedes guessing.
 - `manifest.json` is the app's only contract; it is machine-written by `scripts/publish_help.py` — never hand-edited.
 - Packs are immutable and append-only: `<lang>/help-<v>.zip`, never overwrite, never delete (apps mid-update keep valid URLs).
 - Zip root = help root: `index.html` must be at top level; `__MACOSX/` junk is stripped at publish time.

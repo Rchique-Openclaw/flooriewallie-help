@@ -1,5 +1,7 @@
 # flooriewallie-help
 
+Full rationale and process: [DESIGN.md](DESIGN.md).
+
 Downloadable help packs for the FloorieWallie Android app. One zip per language,
 versioned; the app fetches `manifest.json`, compares its per-language installed
 version, and downloads only changed packs.
