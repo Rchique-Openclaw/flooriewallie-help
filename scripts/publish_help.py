@@ -74,17 +74,21 @@ def sha256_of(path: Path) -> str:
 
 def clone_repo(repo_url: str, workdir: Path) -> tuple[Path, str]:
     """Shallow-clone the repo; returns (clone_dir, default_branch). Handles empty repo."""
-    probe = run(["git", "ls-remote", "--symref", repo_url, "HEAD"], check=False)
+    probe = run(["git", "ls-remote", "--symref", repo_url], check=False)
     clone = workdir / "repo"
     if probe.returncode != 0:
         die(f"cannot reach {repo_url}: {probe.stderr.strip()}")
     m = re.search(r"ref:\s+refs/heads/(\S+)\s+HEAD", probe.stdout)
-    if not m:  # empty repo, no HEAD symref yet
-        clone.mkdir()
-        run(["git", "init", "-b", "main", "."], cwd=clone)
-        run(["git", "remote", "add", "origin", repo_url], cwd=clone)
-        return clone, "main"
-    branch = m.group(1)
+    if m:
+        branch = m.group(1)
+    else:  # no HEAD symref: pick a real branch if any exist, else treat as empty
+        heads = [line.split("refs/heads/")[-1] for line in probe.stdout.splitlines() if "refs/heads/" in line and not line.startswith("ref:")]
+        branch = next((b for b in ("main", "master") if b in heads), heads[0] if heads else None)
+        if branch is None:
+            clone.mkdir()
+            run(["git", "init", "-b", "main", "."], cwd=clone)
+            run(["git", "remote", "add", "origin", repo_url], cwd=clone)
+            return clone, "main"
     run(["git", "clone", "--depth", "1", "--branch", branch, repo_url, str(clone)])
     return clone, branch
 
