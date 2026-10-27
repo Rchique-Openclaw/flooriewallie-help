@@ -1,3 +1,11 @@
 {
-  "languages": {}
+  "languages": {
+    "ru": {
+      "version": 1,
+      "file": "ru/help-1.zip",
+      "sha256": "63d0e6ad698b815fe3e971573d47882c3bd8fd7e3afe853f3883938666b9179b",
+      "sizeBytes": 45301068,
+      "publishedAt": "2026-10-27T04:20:14Z"
+    }
+  }
 }
